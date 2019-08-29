@@ -1,0 +1,14 @@
+{
+  "name": "electron-jupyter",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "hoto17296",
+  "license": "MIT",
+  "dependencies": {
+    "electron": "^6.0.5"
+  }
+}
