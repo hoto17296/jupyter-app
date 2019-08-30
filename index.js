@@ -38,4 +38,15 @@ electron.app.on('ready', () => {
   });
 });
 
-electron.app.on('before-quit', () => jupyter.stop());
+electron.app.on('before-quit', (event) => {
+  const quit = electron.dialog.showMessageBoxSync({
+    message: 'Are you sure you want to quit?',
+    buttons: ['Quit', 'Cancel'],
+  });
+  if (quit == 1) {
+    event.preventDefault();
+  }
+  else {
+    jupyter.stop();
+  }
+});
