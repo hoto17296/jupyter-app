@@ -35,19 +35,15 @@ const jupyter = new Docker.Container(buildRunCommand(runOpts));
 electron.app.on('ready', () => {
   jupyter.start().then(wait(3)).then(() => {
     const window = new electron.BrowserWindow({ fullscreen: true });
+    window.on('close', (event) => {
+      const quit = !electron.dialog.showMessageBoxSync({
+        message: 'Are you sure you want to quit?',
+        buttons: ['Quit', 'Cancel'],
+      });
+      if (!quit) event.preventDefault();
+    });
     window.loadURL(`http://localhost:${runOpts.port}/`);
   });
 });
 
-electron.app.on('before-quit', (event) => {
-  const quit = electron.dialog.showMessageBoxSync({
-    message: 'Are you sure you want to quit?',
-    buttons: ['Quit', 'Cancel'],
-  });
-  if (quit == 1) {
-    event.preventDefault();
-  }
-  else {
-    jupyter.stop();
-  }
-});
+electron.app.on('quit', () => jupyter.stop());
