@@ -21,6 +21,7 @@ function buildRunCommand(opts) {
   return `docker run --rm -d --init \
     -p ${opts.port}:8888 \
     -v ${opts.notebookDir}:/notebooks \
+    -v $(pwd)/shortcuts.json:/root/.jupyter/lab/user-settings/@jupyterlab/shortcuts-extension/plugin.jupyterlab-settings \
     ${opts.image} \
     jupyter lab \
       --allow-root \

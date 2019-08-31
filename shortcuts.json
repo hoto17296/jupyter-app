@@ -1,0 +1,38 @@
+{
+  "application:activate-next-tab": {
+    "command": "application:activate-next-tab",
+    "keys": [
+      "Accel Shift ]"
+    ],
+    "selector": "body",
+    "title": "Activate Next Tab",
+    "category": "Main Area"
+  },
+  "application:activate-previous-tab": {
+    "command": "application:activate-previous-tab",
+    "keys": [
+      "Accel Shift ["
+    ],
+    "selector": "body",
+    "title": "Activate Previous Tab",
+    "category": "Main Area"
+  },
+  "filebrowser:create-main-launcher": {
+    "command": "filebrowser:create-main-launcher",
+    "keys": [
+      "Accel T"
+    ],
+    "selector": "body",
+    "title": "New Launcher",
+    "category": "File Operations"
+  },
+  "docmanager:close": {
+    "command": "docmanager:close",
+    "keys": [
+      "Accel W"
+    ],
+    "selector": ".jp-Activity",
+    "title": "Close Activity",
+    "category": "File Operations"
+  }
+}
