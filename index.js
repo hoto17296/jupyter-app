@@ -1,5 +1,6 @@
 const electron = require('electron');
 const Docker = require('./docker');
+const buildCommand = require('./buildCommand');
 
 function wait(n) {
   return function(...args) {
@@ -11,26 +12,38 @@ function wait(n) {
   }
 }
 
-const runOpts = {
-  image: 'continuumio/anaconda3:2019.03',
-  notebookDir: '$HOME',
-  port: 8888,
+const port = 8888;
+const config = {
+  docker: {
+    command: 'docker',
+    subCommand: 'run',
+    image: 'continuumio/anaconda3:2019.03',
+    opts: {
+      rm: true,
+      detach: true,
+      init: true,
+      publish: [
+        `${port}:8888`,
+      ],
+      volume: [
+        '$HOME:/notebooks',
+        '$(pwd)/shortcuts.json:/root/.jupyter/lab/user-settings/@jupyterlab/shortcuts-extension/plugin.jupyterlab-settings',
+      ],
+    },
+  },
+  jupyter: {
+    command: '/opt/conda/bin/jupyter',
+    subCommand: 'lab',
+    opts: {
+      'allow-root': true,
+      'ip': '0.0.0.0',
+      'LabApp.token': '',
+      'notebook-dir': '/notebooks',
+    },
+  },
 };
 
-function buildRunCommand(opts) {
-  return `docker run --rm -d --init \
-    -p ${opts.port}:8888 \
-    -v ${opts.notebookDir}:/notebooks \
-    -v $(pwd)/shortcuts.json:/root/.jupyter/lab/user-settings/@jupyterlab/shortcuts-extension/plugin.jupyterlab-settings \
-    ${opts.image} \
-    jupyter lab \
-      --allow-root \
-      --ip=0.0.0.0 \
-      --LabApp.token='' \
-      --notebook-dir=/notebooks`;
-}
-
-const jupyter = new Docker.Container(buildRunCommand(runOpts));
+const jupyter = new Docker.Container(buildCommand(config));
 
 electron.app.on('ready', () => {
   jupyter.start().then(wait(3)).then(() => {
@@ -42,7 +55,7 @@ electron.app.on('ready', () => {
       });
       if (!quit) event.preventDefault();
     });
-    window.loadURL(`http://localhost:${runOpts.port}/`);
+    window.loadURL(`http://localhost:${port}/`);
   });
 });
 
