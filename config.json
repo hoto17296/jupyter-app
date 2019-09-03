@@ -1,0 +1,28 @@
+{
+  "docker": {
+    "command": "docker",
+    "subCommand": "run",
+    "image": "continuumio/anaconda3",
+    "port": {
+      "src": 8888,
+      "dest": 8888
+    },
+    "opts": {
+      "name": "jupyter-app",
+      "detach": true,
+      "init": true,
+      "publish": [],
+      "volume": []
+    }
+  },
+  "container": {
+    "command": "/opt/conda/bin/jupyter",
+    "subCommand": "lab",
+    "opts": {
+      "allow-root": true,
+      "ip": "0.0.0.0",
+      "LabApp.token": "",
+      "notebook-dir": "/notebooks"
+    }
+  }
+}

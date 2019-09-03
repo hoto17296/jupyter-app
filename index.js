@@ -1,52 +1,22 @@
+const fs = require('fs');
 const electron = require('electron');
+const deepmerge = require('deepmerge');
 const Docker = require('./docker');
-
-function wait(n) {
-  return function(...args) {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(...args)
-      }, n * 1000)
-    });
-  }
-}
-
-const config = {
-  docker: {
-    command: 'docker',
-    subCommand: 'run',
-    image: 'continuumio/anaconda3:2019.03',
-    port: {
-      src: 8888,
-      dest: 8888,
-    },
-    opts: {
-      name: 'jupyter-app',
-      detach: true,
-      init: true,
-      publish: [],
-      volume: [
-        '$HOME:/notebooks',
-        '$(pwd)/shortcuts.json:/root/.jupyter/lab/user-settings/@jupyterlab/shortcuts-extension/plugin.jupyterlab-settings',
-      ],
-    },
-  },
-  container: {
-    command: '/opt/conda/bin/jupyter',
-    subCommand: 'lab',
-    opts: {
-      'allow-root': true,
-      'ip': '0.0.0.0',
-      'LabApp.token': '',
-      'notebook-dir': '/notebooks',
-    },
-  },
-};
-config.docker.opts.publish.push(`${config.docker.port.src}:${config.docker.port.dest}`);
-
-const jupyter = new Docker.Container(config.docker.opts.name, config);
+const { checkFileExists, wait } = require('./utils');
+const configDefault = require('./config');
 
 electron.app.on('ready', () => {
+  const configDir = (process.env.XDG_CONFIG_HOME || process.env.HOME + '/.config') + '/jupyter-app';
+  const configFile = configDir + '/config.json';
+  fs.mkdirSync(configDir, { recursive: true });
+  if (!checkFileExists(configFile)) fs.writeFileSync(configFile, '{}');
+  const config = deepmerge(configDefault, require(configFile));
+  config.docker.opts.publish.push(`${config.docker.port.src}:${config.docker.port.dest}`);
+  const shortcutConfigPath = '/root/.jupyter/lab/user-settings/@jupyterlab/shortcuts-extension/shortcuts.jupyterlab-settings';
+  config.docker.opts.volume.push(`${__dirname}/shortcuts.json:${shortcutConfigPath}:ro`);
+
+  const jupyter = new Docker.Container(config.docker.opts.name, config);
+
   jupyter.start().then(wait(3)).then(() => {
     const window = new electron.BrowserWindow({ fullscreen: true });
     window.on('close', (event) => {
@@ -61,6 +31,6 @@ electron.app.on('ready', () => {
     console.error(e);
     electron.app.quit();
   });
-});
 
-electron.app.on('quit', () => jupyter.stop());
+  electron.app.on('quit', () => jupyter.stop());
+});
