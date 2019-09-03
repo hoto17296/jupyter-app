@@ -1,25 +1,32 @@
 const child_process = require('child_process');
 const { promisify } = require('util');
+const buildCommand = require('./buildCommand');
 
 const exec = promisify(child_process.exec);
 
 class Container {
-  constructor(runCommand) {
-    this.runCommand = runCommand;
-    this.containerId = null;
+  constructor(name, config) {
+    this.name = name;
+    this.config = config;
+  }
+
+  async checkContainerExists() {
+    const { stdout, stderr } = await exec(`docker ps -a -q -f name='^${this.name}$'`);
+    return !!stdout;
   }
 
   async start() {
     console.log('Starting Container...');
-    const { stdout, stderr } = await exec(this.runCommand);
-    this.containerId = stdout;
+    const command = await this.checkContainerExists()
+      ? `docker start ${this.name}`
+      : buildCommand(this.config);
+    console.log('exec:', command);
+    await exec(command);
   }
 
   async stop() {
-    if (!this.containerId) return;
     console.log('Stopping Container...');
-    await exec('docker stop ' + this.containerId);
-    this.containerId = null;
+    await exec('docker stop ' + this.name);
   }
 }
 

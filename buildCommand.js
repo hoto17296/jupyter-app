@@ -23,9 +23,9 @@ function buildCommand(config) {
     ${config.docker.subCommand} \
     ${buildOpts(config.docker.opts)} \
     ${config.docker.image} \
-    ${config.jupyter.command} \
-    ${config.jupyter.subCommand} \
-    ${buildOpts(config.jupyter.opts)} \
+    ${config.container.command} \
+    ${config.container.subCommand} \
+    ${buildOpts(config.container.opts)} \
   `.replace(/\s\s+/g, ' ').trim();
 }
 
