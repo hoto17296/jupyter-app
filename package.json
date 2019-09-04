@@ -1,15 +1,18 @@
 {
   "name": "jupyter-app",
   "version": "0.1.0",
-  "description": "",
+  "description": "A macOS app as a Jupyter frontend.",
   "main": "src/index.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "build": "electron-builder --mac --x64"
   },
   "author": "hoto17296",
-  "license": "MIT",
   "dependencies": {
-    "deepmerge": "^4.0.0",
-    "electron": "^6.0.5"
+    "deepmerge": "^4.0.0"
+  },
+  "devDependencies": {
+    "electron": "^6.0.5",
+    "electron-builder": "^21.2.0"
   }
 }
