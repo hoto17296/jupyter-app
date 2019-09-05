@@ -10,14 +10,8 @@ function checkFileExists(path) {
   }
 }
 
-function wait(n) {
-  return function(...args) {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(...args)
-      }, n * 1000)
-    });
-  }
+function wait(sec) {
+  return new Promise((resolve) => setTimeout(resolve, sec * 1000));
 }
 
 module.exports = { checkFileExists, wait };

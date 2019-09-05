@@ -5,8 +5,8 @@ const buildCommand = require('./buildCommand');
 const exec = promisify(child_process.exec);
 
 class Container {
-  constructor(name, config) {
-    this.name = name;
+  constructor(config) {
+    this.name = config.docker.opts.name;
     this.config = config;
   }
 
