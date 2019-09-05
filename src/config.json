@@ -12,7 +12,8 @@
       "detach": true,
       "init": true,
       "publish": [],
-      "volume": []
+      "volume": [],
+      "label": []
     }
   },
   "container": {
@@ -21,7 +22,6 @@
     "opts": {
       "allow-root": true,
       "ip": "0.0.0.0",
-      "LabApp.token": "",
       "notebook-dir": "/root"
     }
   }

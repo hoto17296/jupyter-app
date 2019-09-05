@@ -29,6 +29,12 @@ class Container {
     console.log('Stopping Container...');
     await exec('docker stop ' + this.name);
   }
+
+  async getLabels() {
+    const command = `docker inspect -f '{{json .Config.Labels}}' ${this.name}`;
+    const { stdout, stderr } = await exec(command);
+    return JSON.parse(stdout);
+  }
 }
 
 module.exports = { Container };
