@@ -17,7 +17,8 @@ electron.app.on('ready', () => {
 
   const jupyter = new Docker.Container(config.docker.opts.name, config);
 
-  jupyter.start().then(wait(3)).then(() => {
+  jupyter.start().then(wait(3)).then(() => jupyter.checkContainerExists()).then((success) => {
+    if (!success) throw new Error(`Failed to start Jupyter.\nFor details, exec "docker logs ${jupyter.name}".`);
     const window = new electron.BrowserWindow({ fullscreen: true });
     window.on('close', (event) => {
       const quit = !electron.dialog.showMessageBoxSync({

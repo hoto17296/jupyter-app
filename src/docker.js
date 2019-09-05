@@ -10,14 +10,15 @@ class Container {
     this.config = config;
   }
 
-  async checkContainerExists() {
-    const { stdout, stderr } = await exec(`docker ps -a -q -f name='^${this.name}$'`);
+  async checkContainerExists(runningOnly=true) {
+    const command = `docker ps ${runningOnly ? '' : '-a'} -q -f name='^${this.name}$'`;
+    const { stdout, stderr } = await exec(command);
     return !!stdout;
   }
 
   async start() {
     console.log('Starting Container...');
-    const command = await this.checkContainerExists()
+    const command = await this.checkContainerExists(false)
       ? `docker start ${this.name}`
       : buildCommand(this.config);
     console.log('exec:', command);
