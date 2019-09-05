@@ -22,7 +22,7 @@
       "allow-root": true,
       "ip": "0.0.0.0",
       "LabApp.token": "",
-      "notebook-dir": "/notebooks"
+      "notebook-dir": "/root"
     }
   }
 }
