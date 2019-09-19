@@ -1,9 +1,13 @@
 const fs = require('fs');
 const electron = require('electron');
+const contextMenu = require('electron-context-menu');
 const deepmerge = require('deepmerge');
 const Docker = require('./docker');
 const { checkFileExists, wait } = require('./utils');
 const configDefault = require('./config');
+
+// Show native context menu when hold down shift and right click.
+contextMenu();
 
 function buildConfig() {
   const configDir = (process.env.XDG_CONFIG_HOME || process.env.HOME + '/.config') + '/jupyter-app';

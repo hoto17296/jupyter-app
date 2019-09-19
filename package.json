@@ -9,7 +9,8 @@
   },
   "author": "hoto17296",
   "dependencies": {
-    "deepmerge": "^4.0.0"
+    "deepmerge": "^4.0.0",
+    "electron-context-menu": "^0.15.0"
   },
   "devDependencies": {
     "electron": "^6.0.5",
