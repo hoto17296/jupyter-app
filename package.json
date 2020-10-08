@@ -9,11 +9,11 @@
   },
   "author": "hoto17296",
   "dependencies": {
-    "deepmerge": "^4.0.0",
-    "electron-context-menu": "^0.15.0"
+    "deepmerge": "*",
+    "electron-context-menu": "*"
   },
   "devDependencies": {
-    "electron": "^6.0.5",
-    "electron-builder": "^21.2.0"
+    "electron": "*",
+    "electron-builder": "*"
   }
 }
