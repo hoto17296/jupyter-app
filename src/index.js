@@ -17,7 +17,7 @@ function buildConfig() {
   const config = deepmerge(configDefault, require(configFile));
 
   // publish port
-  config.docker.opts.publish.push(`${config.docker.port.src}:${config.docker.port.dest}`);
+  config.docker.opts.publish.push(`127.0.0.1:${config.docker.port.src}:${config.docker.port.dest}`);
 
   // set shortcuts
   const shortcutConfigPath = '/root/.jupyter/lab/user-settings/@jupyterlab/shortcuts-extension/shortcuts.jupyterlab-settings';
@@ -52,7 +52,7 @@ electron.app.on('ready', async () => {
       if (!quit) event.preventDefault();
     });
     const token = (await jupyter.getLabels())['JupyterLab.Token'];
-    window.loadURL(`http://localhost:${jupyter.config.docker.port.src}/?token=${token}`);
+    window.loadURL(`http://127.0.0.1:${jupyter.config.docker.port.src}/?token=${token}`);
   }
   catch (e) {
     console.error(e);
