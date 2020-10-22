@@ -20,7 +20,7 @@ function buildConfig() {
   config.docker.opts.publish.push(`127.0.0.1:${config.docker.port.src}:${config.docker.port.dest}`);
 
   // set shortcuts
-  const shortcutConfigPath = '/root/.jupyter/lab/user-settings/@jupyterlab/shortcuts-extension/shortcuts.jupyterlab-settings';
+  const shortcutConfigPath = '/home/jovyan/.jupyter/lab/user-settings/@jupyterlab/shortcuts-extension/shortcuts.jupyterlab-settings';
   config.docker.opts.volume.push(`${__dirname}/shortcuts.json:${shortcutConfigPath}:ro`);
 
   // set token
