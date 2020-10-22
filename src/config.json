@@ -2,7 +2,7 @@
   "docker": {
     "command": "docker",
     "subCommand": "run",
-    "image": "continuumio/anaconda3",
+    "image": "jupyter/scipy-notebook",
     "port": {
       "src": 8888,
       "dest": 8888
@@ -11,18 +11,15 @@
       "name": "jupyter-app",
       "detach": true,
       "init": true,
+      "entrypoint": "start.sh",
       "publish": [],
       "volume": [],
       "label": []
     }
   },
   "container": {
-    "command": "/opt/conda/bin/jupyter",
+    "command": "jupyter",
     "subCommand": "lab",
-    "opts": {
-      "allow-root": true,
-      "ip": "0.0.0.0",
-      "notebook-dir": "/root"
-    }
+    "opts": {}
   }
 }
