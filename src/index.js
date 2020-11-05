@@ -51,6 +51,10 @@ electron.app.on('ready', async () => {
       });
       if (!quit) event.preventDefault();
     });
+    window.webContents.on('new-window', (event, url) => {
+      event.preventDefault();
+      electron.shell.openExternal(url);
+    });
     const token = (await jupyter.getLabels())['JupyterLab.Token'];
     window.loadURL(`http://127.0.0.1:${jupyter.config.docker.port.src}/?token=${token}`);
   }
