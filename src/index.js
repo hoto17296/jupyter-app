@@ -26,10 +26,6 @@ function buildConfig() {
     config.docker.opts.volume.push(`${userSettingsHostPath}:${userSettingsContainerPath}`);
   }
 
-  // set shortcuts
-  const shortcutConfigContainerPath = `${userSettingsContainerPath}/@jupyterlab/shortcuts-extension/shortcuts.jupyterlab-settings`;
-  config.docker.opts.volume.push(`${__dirname}/shortcuts.json:${shortcutConfigContainerPath}:ro`);
-
   // set token
   let token = config.container.opts['LabApp.token'];
   if (token === undefined) {
