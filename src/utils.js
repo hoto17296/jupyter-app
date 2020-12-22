@@ -10,8 +10,18 @@ function checkFileExists(path) {
   }
 }
 
+function checkDirExists(path) {
+  try {
+    return fs.statSync(path).isDirectory();
+  }
+  catch (e) {
+    if (e.code === 'ENOENT') return false;
+    else throw e;
+  }
+}
+
 function wait(sec) {
   return new Promise((resolve) => setTimeout(resolve, sec * 1000));
 }
 
-module.exports = { checkFileExists, wait };
+module.exports = { checkFileExists, checkDirExists, wait };

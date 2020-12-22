@@ -3,7 +3,7 @@ const electron = require('electron');
 const contextMenu = require('electron-context-menu');
 const deepmerge = require('deepmerge');
 const Docker = require('./docker');
-const { checkFileExists, wait } = require('./utils');
+const { checkFileExists, checkDirExists, wait } = require('./utils');
 const configDefault = require('./config');
 
 // Show native context menu when hold down shift and right click.
@@ -19,9 +19,16 @@ function buildConfig() {
   // publish port
   config.docker.opts.publish.push(`127.0.0.1:${config.docker.port.src}:${config.docker.port.dest}`);
 
+  // User settings
+  const userSettingsHostPath = configDir + '/user-settings';
+  const userSettingsContainerPath = '/home/jovyan/.jupyter/lab/user-settings';
+  if (checkDirExists(userSettingsHostPath)) {
+    config.docker.opts.volume.push(`${userSettingsHostPath}:${userSettingsContainerPath}`);
+  }
+
   // set shortcuts
-  const shortcutConfigPath = '/home/jovyan/.jupyter/lab/user-settings/@jupyterlab/shortcuts-extension/shortcuts.jupyterlab-settings';
-  config.docker.opts.volume.push(`${__dirname}/shortcuts.json:${shortcutConfigPath}:ro`);
+  const shortcutConfigContainerPath = `${userSettingsContainerPath}/@jupyterlab/shortcuts-extension/shortcuts.jupyterlab-settings`;
+  config.docker.opts.volume.push(`${__dirname}/shortcuts.json:${shortcutConfigContainerPath}:ro`);
 
   // set token
   let token = config.container.opts['LabApp.token'];
