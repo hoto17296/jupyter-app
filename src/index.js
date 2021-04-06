@@ -10,7 +10,7 @@ const configDefault = require('./config');
 contextMenu();
 
 function buildConfig() {
-  const configDir = (process.env.XDG_CONFIG_HOME || process.env.HOME + '/.config') + '/jupyter-app';
+  const configDir = (process.env.JUPYTER_CONFIG_DIR || process.env.HOME + '/.jupyter') + '/app';
   const configFile = configDir + '/config.json';
   fs.mkdirSync(configDir, { recursive: true });
   if (!checkFileExists(configFile)) fs.writeFileSync(configFile, '{}');
